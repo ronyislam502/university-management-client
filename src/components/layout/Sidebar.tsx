@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Layout, Menu } from "antd";
 import { sidebarItemsGenerator } from "../../utils/sidebarItemsGenerators";
 import { facultyRoutes } from "../../routes/facultyRoutes";
 import { adminRoutes } from "../../routes/adminRoutes";
 import { studentRoutes } from "../../routes/studentRoutes";
+import { useAppSelector } from "../../redux/hooks";
+import { selectCurrentUser, TUser } from "../../redux/features/auth/authSlice";
+
 const { Sider } = Layout;
 
 const userRole = {
@@ -12,18 +16,19 @@ const userRole = {
 };
 
 const Sidebar = () => {
-  const role = "student";
-  let sidebarItems;
+  const user = useAppSelector(selectCurrentUser) as TUser;
 
-  switch (role) {
-    case userRole.ADMIN:
-      sidebarItems = sidebarItemsGenerator(adminRoutes, userRole.ADMIN);
+  let sidebarItems: any;
+
+  switch (user!.role) {
+    case userRole?.ADMIN:
+      sidebarItems = sidebarItemsGenerator(adminRoutes, userRole?.ADMIN);
       break;
-    case userRole.FACULTY:
-      sidebarItems = sidebarItemsGenerator(facultyRoutes, userRole.FACULTY);
+    case userRole?.FACULTY:
+      sidebarItems = sidebarItemsGenerator(facultyRoutes, userRole?.FACULTY);
       break;
-    case userRole.STUDENT:
-      sidebarItems = sidebarItemsGenerator(studentRoutes, userRole.STUDENT);
+    case userRole?.STUDENT:
+      sidebarItems = sidebarItemsGenerator(studentRoutes, userRole?.STUDENT);
       break;
 
     default:
